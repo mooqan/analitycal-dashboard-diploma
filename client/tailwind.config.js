@@ -5,8 +5,16 @@ export default {
     "./src/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
-    extend: {},
+    container: {
+      padding: '2rem',
+      center: true,
+    },
+    extend: {
+      fontFamily: {
+        roboto: ['Roboto', "sans-serif"]
+      }
+    },
   },
-  plugins: [],
+  plugins: [require('@tailwindcss/forms')],
 }
 
