@@ -5,6 +5,7 @@ import Home from '../pages/Home'
 import Urls from '../pages/Urls'
 import Auth from '../pages/Auth'
 import Profile from '../pages/Profile'
+import { ProtectedRoute } from '../components/ProtectedRoute'
 
 export const router = createBrowserRouter([
 	{
@@ -18,7 +19,10 @@ export const router = createBrowserRouter([
 			},
 			{
 				path: 'urls',
-				element: <Urls />,
+				element: (<ProtectedRoute>
+					<Urls />
+				</ProtectedRoute>
+				),
 			},
             {
                 path: 'auth',
@@ -26,7 +30,10 @@ export const router = createBrowserRouter([
             },
 			{
                 path: 'profile',
-                element: <Profile />,
+                element: (<ProtectedRoute>
+					<Profile />
+				</ProtectedRoute>
+				),
             },
 		],
 	},
