@@ -1,6 +1,6 @@
 import { FC } from 'react'
 import { Link, NavLink, useNavigate } from 'react-router-dom'
-import { FaLink, FaSignOutAlt } from 'react-icons/fa'
+import { FaLink, FaSignOutAlt, FaSignInAlt } from 'react-icons/fa'
 import { useAuth } from '../hooks/useAuth'
 import { removeTokenFromLocalStorage } from '../helpers/localstorage.helper'
 import { useAppDispatch } from '../store/hooks'
@@ -62,8 +62,9 @@ const Header: FC = () => {
                 <FaSignOutAlt />
             </button>
         ) : (
-            <Link className='py-2 text-white/50 hover:text-white ml-auto' to={'auth'}>
-                Log In / Sign In
+            <Link className='btn btn-green py-2 hover:text-white ml-auto' to={'auth'}>
+                <span>Log In / Sign In</span>
+                <FaSignInAlt />
             </Link>
         )
      }
