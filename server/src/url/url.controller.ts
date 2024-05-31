@@ -1,25 +1,25 @@
-import { Controller, Post, Body, Get, Param, Res, NotFoundException, UsePipes, ValidationPipe, BadRequestException } from '@nestjs/common';
+import { Controller, Post, Body, Get, Param, Res, NotFoundException, UsePipes, ValidationPipe, BadRequestException, UseGuards, Req } from '@nestjs/common';
 import { Response } from 'express';
-import { ApiTags, ApiOperation, ApiResponse, ApiProduces, ApiBody } from '@nestjs/swagger';
-import { UrlDto } from './dto/url.dto';
+import { ApiTags, ApiOperation, ApiResponse, ApiBody, ApiBearerAuth } from '@nestjs/swagger';
+import { CreateUrlDto } from './dto/url.dto';
 import { UrlService } from './url.service';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { User } from '../user/entities/user.entity';
+import { AuthenticatedRequest } from '../auth/auth.types';
 
 @ApiTags('Shorten')
 @Controller('shorten')
 export class UrlController {
-  constructor(private readonly shortenService: UrlService) {}
-
+  constructor(private readonly shortenService: UrlService) { }
   @ApiOperation({ summary: 'Create a short URL' })
-  @ApiBody({ type: UrlDto })
+  @ApiBody({ type: CreateUrlDto })
   @ApiResponse({ status: 201, description: 'The URL has been successfully shortened.' })
   @ApiResponse({ status: 400, description: 'Invalid URL.' })
   @UsePipes(new ValidationPipe({ transform: true }))
   @Post()
-  async createShortUrl(@Body('url') url: string): Promise<{ shortUrl: string }> {
-    if(!url.length) {
-      throw new BadRequestException('URL cannot be empty');
-  }
-    const shortUrl = await this.shortenService.shortenUrl(url);
+  async createShortUrl(@Body() createUrlDto: CreateUrlDto, @Req() req: AuthenticatedRequest): Promise<{ shortUrl: string }> {
+    const user = req.user as User;
+    const shortUrl = await this.shortenService.shortenUrl(createUrlDto.originalUrl, createUrlDto.title, user);
     return { shortUrl };
   }
 
@@ -36,34 +36,40 @@ export class UrlController {
     }
   }
 
-  @ApiOperation({ summary: 'Generate QR code for short URL' })
+  @ApiOperation({ summary: 'Generate QR code for short URL as PNG' })
   @ApiResponse({
     status: 200,
     description: 'QR code generated successfully.',
     content: {
-      'application/json': {
+      'image/png': {
         schema: {
-          type: 'object',
-          properties: {
-            qrCode: {
-              type: 'string',
-              description: 'Base64 encoded QR code image',
-            },
-          },
+          type: 'string',
+          format: 'binary',
         },
       },
     },
   })
   @ApiResponse({ status: 404, description: 'Short URL not found.' })
-  @ApiProduces('application/json')
-  @Get(':shortUrl/qrcode')
-  async getQrCode(@Param('shortUrl') shortUrl: string): Promise<{ qrCode: string }> {
+  @Get(':shortUrl/qr/png')
+  async getQrCodePng(@Param('shortUrl') shortUrl: string, @Res() res: Response) {
     const originalUrl = await this.shortenService.getOriginalUrl(shortUrl);
-    if (originalUrl) {
-      const qrCodeDataUrl = await this.shortenService.generateQrCode(shortUrl);
-      return { qrCode: qrCodeDataUrl };
-    } else {
+    if (!originalUrl) {
       throw new NotFoundException('Short URL not found');
     }
+    const qrCodeBuffer = await this.shortenService.generateQrCodePng(shortUrl);
+    res.setHeader('Content-Type', 'image/png');
+    res.send(qrCodeBuffer);
+  }
+
+  @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard)
+  @ApiOperation({ summary: 'Get URLs created by the authenticated user' })
+  @ApiResponse({ status: 200, description: 'User URLs retrieved successfully.' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @Get('user/urls')
+  async getUserUrls(@Req() req: AuthenticatedRequest) {
+    const user = req.user as User;
+    const urls = await this.shortenService.getUserUrls(user);
+    return urls;
   }
 }

@@ -17,8 +17,8 @@ import { UserModule } from 'src/user/user.module';
     }),
     inject: [ConfigService],
   })
-],
+  ],
   controllers: [AuthController],
   providers: [AuthService, LocalStrategy, JwtStrategy]
 })
-export class AuthModule {}
+export class AuthModule { }

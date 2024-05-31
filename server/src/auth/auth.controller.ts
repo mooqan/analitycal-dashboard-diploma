@@ -8,21 +8,21 @@ import { ApiBearerAuth, ApiBody, ApiOperation, ApiTags } from "@nestjs/swagger";
 @ApiTags('Auth')
 @Controller('auth')
 export class AuthController {
-    constructor(private readonly authService: AuthService) { }
+  constructor(private readonly authService: AuthService) { }
 
-    @ApiOperation({ summary: 'Login to existing account' })
-    @ApiBody({ type: AuthDto })
-    @Post('login')
-    @UseGuards(LocalAuthGuard)
-    async login(@Request() req) {
-        return this.authService.login(req.user);
-    }
-    
-    @ApiBearerAuth()
-    @ApiOperation({ summary: 'Get profile' })
-    @Get('profile')
-    @UseGuards(JwtAuthGuard)
-    getProfile(@Request() req) {
-      return req.user;
-    }
+  @ApiOperation({ summary: 'Login to existing account' })
+  @ApiBody({ type: AuthDto })
+  @Post('login')
+  @UseGuards(LocalAuthGuard)
+  async login(@Request() req) {
+    return this.authService.login(req.user);
+  }
+
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Get profile' })
+  @Get('profile')
+  @UseGuards(JwtAuthGuard)
+  getProfile(@Request() req) {
+    return req.user;
+  }
 }

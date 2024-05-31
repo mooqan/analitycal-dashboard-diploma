@@ -11,7 +11,7 @@ export class UserService {
   constructor(
     @InjectRepository(User) private readonly userRepository: Repository<User>,
     private readonly jwtService: JwtService,
-  ) {}
+  ) { }
 
   async create(createUserDto: UserDto) {
     const existUser = await this.userRepository.findOne({
@@ -19,7 +19,7 @@ export class UserService {
         email: createUserDto.email,
       },
     })
-    if(existUser) throw new BadRequestException('This email already exist!')
+    if (existUser) throw new BadRequestException('This email already exist!')
 
     const user = await this.userRepository.save({
       email: createUserDto.email,
@@ -32,9 +32,10 @@ export class UserService {
   }
 
   async findOne(email: string) {
-    return await this.userRepository.findOne({ where: {
-      email,
-    },
-  })
+    return await this.userRepository.findOne({
+      where: {
+        email,
+      },
+    })
   }
 }

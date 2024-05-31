@@ -6,7 +6,7 @@ import { UserDto } from './dto/user.dto';
 @ApiTags('Register')
 @Controller('user')
 export class UserController {
-  constructor(private readonly userService: UserService) {}
+  constructor(private readonly userService: UserService) { }
 
   @ApiOperation({ summary: 'Create new User' })
   @ApiBody({ type: UserDto })

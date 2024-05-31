@@ -1,6 +1,5 @@
-import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, ManyToOne, JoinColumn } from 'typeorm';
-import { User } from "src/user/entities/user.entity";
-
+import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
+import { User } from '../../user/entities/user.entity';
 
 @Entity()
 export class Url {
@@ -13,15 +12,9 @@ export class Url {
     @Column({ unique: true })
     shortUrl: string;
 
-    @ManyToOne(() => User, (user) => user.urls)
-    @JoinColumn({ name: 'user_id' })
-    user: User
+    @Column()
+    title: string;
 
-    @CreateDateColumn()
-    createdAt: Date
-
-    @UpdateDateColumn()
-    updatedAt: Date
+    @ManyToOne(() => User, user => user.urls)
+    user: User;
 }
-
-
