@@ -1,5 +1,5 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
-import { CreateUserDto } from './dto/create-user.dto';
+import { UserDto } from './dto/user.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from './entities/user.entity';
@@ -13,7 +13,7 @@ export class UserService {
     private readonly jwtService: JwtService,
   ) {}
 
-  async create(createUserDto: CreateUserDto) {
+  async create(createUserDto: UserDto) {
     const existUser = await this.userRepository.findOne({
       where: {
         email: createUserDto.email,

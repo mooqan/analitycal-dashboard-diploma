@@ -1,44 +1,49 @@
-import { Inject, Injectable } from '@nestjs/common';
-import { CreateUrlDto } from './dto/create-url.dto';
-import { UpdateUrlDto } from './dto/update-url.dto';
-import { map, Observable } from 'rxjs';
-import { UrlRepository, UrlRepositoryTag } from './url.repository';
-
+import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { Url } from './entities/url.entity';
+import * as QRCode from 'qrcode';
 
 @Injectable()
 export class UrlService {
   constructor(
-    @Inject(UrlRepositoryTag) private readonly urlRepository: UrlRepository,
+    @InjectRepository(Url)
+    private readonly urlRepository: Repository<Url>,
   ) {}
- 
-  shorten(url: string): Observable<string> {
-    const hash = Math.random().toString(36).slice(7);
-    return this.urlRepository.put(hash, url).pipe(map(() => `http://localhost:3001/api/shorten/${hash}`));
-  }
- 
-  retrieve(hash: string): Observable<string> {
-    return this.urlRepository.get(hash); 
-  }
-  
-  create(createUrlDto: CreateUrlDto) {
-    return 'This action adds a new url';
+
+  private generateShortUrl(length: number): string {
+    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    let result = '';
+    for (let i = 0; i < length; i++) {
+      result += characters.charAt(Math.floor(Math.random() * characters.length));
+    }
+    return result;
   }
 
-  findAll() {
-    return `This action returns all url`;
+  async shortenUrl(originalUrl: string): Promise<string> {
+    let shortUrl: string;
+    let existingUrl: Url;
+
+    do {
+      shortUrl = this.generateShortUrl(6);
+      existingUrl = await this.urlRepository.findOneBy({ shortUrl });
+    } while (existingUrl);
+
+    const newUrl = this.urlRepository.create({ originalUrl, shortUrl });
+    await this.urlRepository.save(newUrl);
+    return shortUrl;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} url`;
+  async getOriginalUrl(shortUrl: string): Promise<string> {
+    const url = await this.urlRepository.findOneBy({ shortUrl });
+    if (url) {
+      return url.originalUrl;
+    }
+    return null;
   }
 
-  update(id: number, updateUserDto: UpdateUrlDto) {
-    return `This action updates a #${id} url`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} url`;
+  async generateQrCode(shortUrl: string): Promise<string> {
+    const url = `http://localhost:3000/shorten/${shortUrl}`;
+    return QRCode.toDataURL(url);
   }
 }
-
-
