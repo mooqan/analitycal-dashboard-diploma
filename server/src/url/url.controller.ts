@@ -4,7 +4,7 @@ import { ApiTags, ApiOperation, ApiResponse, ApiProduces, ApiBody } from '@nestj
 import { UrlDto } from './dto/url.dto';
 import { UrlService } from './url.service';
 
-@ApiTags('shorten')
+@ApiTags('Shorten')
 @Controller('shorten')
 export class UrlController {
   constructor(private readonly shortenService: UrlService) {}

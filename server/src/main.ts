@@ -4,18 +4,19 @@ import { AppModule } from './app.module';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-
-  app.setGlobalPrefix('api');
+  
   app.enableCors();
 
   const config = new DocumentBuilder()
-    .setTitle('URL shortener')
-    .setDescription('This API is used for shorten links')
+    .setTitle('URL shortener API')
+    .setDescription('This API is used for shorten links and generate QR codes')
     .setVersion('1.0')
-    .addTag('url_shortener')
+    .addBearerAuth()
     .build();
+
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);
   await app.listen(3001);
 }
 bootstrap();
+
