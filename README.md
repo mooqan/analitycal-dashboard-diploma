@@ -13,10 +13,11 @@ DB_PORT=your_port
 DB_USERNAME='your_username'
 DB_PASSWORD='your_password'
 DB_NAME='your_db'
+OPENAI_API_KEY=your_openai_api_key_here
 ```
 
 ```
-  docker compose up -d –build
+docker compose up -d –build
 ```
 
 ## Features

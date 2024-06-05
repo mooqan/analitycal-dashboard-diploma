@@ -1,11 +1,12 @@
-// src/api/axios.api.ts
 import axios from "axios";
 import { getTokenFromLocalStorage } from "../helpers/localstorage.helper";
+
+const token = getTokenFromLocalStorage();
 
 export const instance = axios.create({
     baseURL: 'http://localhost:3001',
     headers: {
-        Authorization: 'Bearer ' + getTokenFromLocalStorage() || '',
+        Authorization: token ? `Bearer ${token}` : '',
     },
 });
 
@@ -25,6 +26,17 @@ export const createData = async (data: { date: string, sales: number, revenue: n
         return response.data;
     } catch (error) {
         console.error('Error creating data:', error);
+        throw error;
+    }
+};
+
+export const analyzeData = async (data: any) => {
+    
+    try {
+        const response = await instance.post('/chatgpt/analyze', { data });        
+        return response.data;
+    } catch (error) {
+        console.error('Error analyzing data:', error);
         throw error;
     }
 };

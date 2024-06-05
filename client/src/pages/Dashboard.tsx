@@ -1,26 +1,17 @@
 import { FC, useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend, PointElement, LineElement, ArcElement } from 'chart.js';
 import { Bar, Line, Pie } from 'react-chartjs-2';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
-import { getData, createData } from '../api/axios.api';
+import { getData, createData, analyzeData } from '../api/axios.api';
 import { format } from 'date-fns';
 import { ru } from 'date-fns/locale';
 
-// Register the necessary components
-ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  BarElement,
-  Title,
-  Tooltip,
-  Legend,
-  PointElement,
-  LineElement,
-  ArcElement
-);
+ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend, PointElement, LineElement, ArcElement);
 
 const Dashboard: FC = () => {
+    const navigate = useNavigate();
     const [startDate, setStartDate] = useState<Date | null>(new Date('2022-01-01'));
     const [endDate, setEndDate] = useState<Date | null>(new Date());
     const [chartData, setChartData] = useState<any>([]);
@@ -75,6 +66,17 @@ const Dashboard: FC = () => {
         setChartData(filteredData);
     };
 
+    const handleAnalyzeData = async () => {
+        try {
+            const recommendationsResponse = await analyzeData(chartData);
+            
+            navigate('/analysis-report', { state: { recommendations: recommendationsResponse } });
+        } catch (error) {
+            console.error('Error analyzing data:', error);
+        }
+    };
+    
+
     const calculateKpis = (data: any) => {
         const totalSales = data.reduce((sum: number, item: any) => sum + item.sales, 0);
         const totalRevenue = data.reduce((sum: number, item: any) => sum + item.revenue, 0);
@@ -120,7 +122,6 @@ const Dashboard: FC = () => {
         ],
     };
 
-    // Calculate data for Pie Chart
     const pieData = {
         labels: ['Sales', 'Revenue', 'Orders'],
         datasets: [
@@ -138,7 +139,10 @@ const Dashboard: FC = () => {
 
     return (
         <div className="container mx-auto p-4">
-            <h1 className="text-2xl font-bold mb-4">Dashboard</h1>
+            <div className="flex justify-between items-center mb-4">
+                <h1 className="text-2xl font-bold">Dashboard</h1>
+                <button onClick={handleAnalyzeData} className="btn btn-blue">Analyze Data</button>
+            </div>
             <div className="date-filters flex justify-center gap-4 mb-5">
                 <div className="flex flex-col items-center">
                     <label className="mb-2 text-white">Start Date</label>

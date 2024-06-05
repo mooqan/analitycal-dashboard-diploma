@@ -5,6 +5,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from './user/entities/user.entity';
 import { AuthModule } from './auth/auth.module';
 import { DataModule } from './data/data.module';
+import { ChatGptModule } from './chatgpt/chatgpt.module';
 
 @Module({
   imports: [UserModule,
@@ -27,6 +28,7 @@ import { DataModule } from './data/data.module';
     UserModule,
     AuthModule,
     DataModule,
+    ChatGptModule,
   ],
 
 })
