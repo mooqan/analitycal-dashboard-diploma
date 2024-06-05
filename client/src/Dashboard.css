@@ -1,0 +1,26 @@
+.date-filters {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.kpi-container {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 20px;
+}
+
+.kpi {
+    text-align: center;
+}
+
+.kpi h2 {
+    margin-bottom: 10px;
+    font-size: 1.5em;
+}
+
+.kpi p {
+    font-size: 1.2em;
+    font-weight: bold;
+}

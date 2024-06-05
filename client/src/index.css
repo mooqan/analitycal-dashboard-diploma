@@ -23,6 +23,21 @@
     .container {
         @apply max-w-[1000px];
     }
+    .kpi-container {
+        @apply flex justify-around mb-5;
+    }
+    .kpi {
+        @apply text-center p-4 bg-slate-800 rounded-md shadow-lg;
+    }
+    .kpi h2 {
+        @apply mb-2 text-xl font-semibold;
+    }
+    .kpi p {
+        @apply text-lg font-bold;
+    }
+    .date-filters {
+        @apply flex justify-center gap-4 mb-5;
+    }
 }
 @layer utilities {
     .btn-red {

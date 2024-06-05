@@ -1,41 +1,33 @@
-import { createBrowserRouter } from 'react-router-dom'
-import Layout from '../pages/Layout'
-import ErrorPage from '../pages/ErrorPage'
-import Home from '../pages/Home'
-import Urls, { urlsAction } from '../pages/Urls'
-import Auth from '../pages/Auth'
-import Profile from '../pages/Profile'
-import { ProtectedRoute } from '../components/ProtectedRoute'
+import { createBrowserRouter } from 'react-router-dom';
+import Layout from '../pages/Layout';
+import ErrorPage from '../pages/ErrorPage';
+import Home from '../pages/Home';
+import Auth from '../pages/Auth';
+import Dashboard from '../pages/Dashboard'; 
+import { ProtectedRoute } from '../components/ProtectedRoute';
 
 export const router = createBrowserRouter([
-	{
-		path: '/',
-		element: <Layout />,
-		errorElement: <ErrorPage />,
-		children: [
-			{
-				index: true,
-				element: <Home />,
-			},
-			{
-				path: 'urls',
-				action: urlsAction,
-				element: (<ProtectedRoute>
-					<Urls />
-				</ProtectedRoute>
-				),
-			},
+    {
+        path: '/',
+        element: <Layout />,
+        errorElement: <ErrorPage />,
+        children: [
+            {
+                index: true,
+                element: <Home />,
+            },
             {
                 path: 'auth',
                 element: <Auth />,
             },
-			{
-                path: 'profile',
-                element: (<ProtectedRoute>
-					<Profile />
-				</ProtectedRoute>
-				),
+            {
+                path: 'dashboard',
+                element: (
+                    <ProtectedRoute>
+                        <Dashboard />
+                    </ProtectedRoute>
+                ),
             },
-		],
-	},
-])
+        ],
+    },
+]);

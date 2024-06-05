@@ -19,57 +19,50 @@ const Header: FC = () => {
         navigate('/')
     }
 
+    return (
+      <header className='flex items-center bg-slate-800 p-4 shadow-sm blackdrop-blur-sm'>
+        <Link to="/">
+            <FaLink size={20} />
+        </Link>
 
-  return (
-  <header className='flex items-center bg-slate-800 p-4 shadow-sm blackdrop-blur-sm'>
-    <Link to="/">
-    <FaLink size={20} />
-    </Link>
+        {/* Menu */}
+        {isAuth && (
+            <nav className='ml-auto mr-10'>
+                <ul className="flex items-center gap-5">
+                    <li>
+                        <NavLink to={'/'} className={({ isActive }) => 
+                        isActive ? 'text-white' : 'text-white/50'
+                    }
+                    >
+                        Home
+                        </NavLink>
+                    </li>
+                    <li>
+                        <NavLink to={'/dashboard'} className={({ isActive }) => 
+                        isActive ? 'text-white' : 'text-white/50'
+                    }
+                    >Dashboard</NavLink>
+                    </li>
+                </ul>
+            </nav>
+        )}
 
-    {/* Menu */}
-    {isAuth && (
-        <nav className='ml-auto mr-10'>
-            <ul className=" flex items-center gap-5">
-                <li>
-                    <NavLink to={'/'} className={({ isActive }) => 
-                    isActive ? 'text-white' : 'text-white/50'
-                }
-                >
-                    Home
-                    </NavLink>
-                </li>
-                <li>
-                    <NavLink to={'/urls'} className={({ isActive }) => 
-                    isActive ? 'text-white' : 'text-white/50'
-                }
-                >Create new link</NavLink>
-                </li>
-                <li>
-                    <NavLink to={'/profile'} className={({ isActive }) => 
-                    isActive ? 'text-white' : 'text-white/50'
-                }
-                >Profile</NavLink>
-                </li>
-            </ul>
-        </nav>
-    )}
-
-    {/* Actions */}
-     {
-        isAuth ? (
-            <button className='btn btn-red' onClick={logoutHandler}>
-                <span>Log Out</span>
-                <FaSignOutAlt />
-            </button>
-        ) : (
-            <Link className='btn btn-green py-2 hover:text-white ml-auto' to={'auth'}>
-                <span>Log In / Sign In</span>
-                <FaSignInAlt />
-            </Link>
-        )
-     }
-  </header>
-  )
+        {/* Actions */}
+        {
+            isAuth ? (
+                <button className='btn btn-red' onClick={logoutHandler}>
+                    <span>Log Out</span>
+                    <FaSignOutAlt />
+                </button>
+            ) : (
+                <Link className='btn btn-green py-2 hover:text-white ml-auto' to={'auth'}>
+                    <span>Log In / Sign In</span>
+                    <FaSignInAlt />
+                </Link>
+            )
+        }
+      </header>
+    )
 }
 
 export default Header
