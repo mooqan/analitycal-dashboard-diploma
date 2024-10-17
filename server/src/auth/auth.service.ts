@@ -18,7 +18,7 @@ export class AuthService {
         if (user && passwordIsMatches) {
             return user
         }
-        throw new UnauthorizedException('User or password are incorrect')
+        throw new UnauthorizedException('Некорректный логин или пароль!')
     }
     async login(user: IUser) {
         const { id, email } = user

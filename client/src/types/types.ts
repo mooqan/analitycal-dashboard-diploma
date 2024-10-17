@@ -17,7 +17,7 @@ export interface IResponseUser {
     password: string
 }
 
-export interface IResponseUserData{
-    token: string 
+export interface IResponseUserData {
+    token: string
     user: IResponseUser
 }

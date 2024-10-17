@@ -13,6 +13,6 @@ export class UserDto {
         type: 'string',
         example: '123456'
     })
-    @MinLength(6, { message: 'Password must be more than 6 symbols' })
+    @MinLength(6, { message: 'Пароль должен быть больше 6 символов!' })
     password: string;
 }

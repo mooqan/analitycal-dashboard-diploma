@@ -31,9 +31,9 @@ export const createData = async (data: { date: string, sales: number, revenue: n
 };
 
 export const analyzeData = async (data: any) => {
-    
+
     try {
-        const response = await instance.post('/chatgpt/analyze', { data });        
+        const response = await instance.post('/chatgpt/analyze', { data });
         return response.data;
     } catch (error) {
         console.error('Error analyzing data:', error);

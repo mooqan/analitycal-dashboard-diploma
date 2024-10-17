@@ -7,9 +7,9 @@ const AnalysisReport: FC = () => {
 
 	return (
 		<div className="container mx-auto p-4">
-			<h1 className="text-2xl font-bold mb-4">Analysis Report</h1>
+			<h1 className="text-2xl font-bold mb-4">Аналитический отчёт</h1>
 			<div className="p-4 bg-gray-800 text-white rounded">
-				<h2 className="text-xl font-bold">Recommendations</h2>
+				<h2 className="text-xl font-bold">Рекомендации от ChatGPT</h2>
 				<p>{recommendations}</p>
 			</div>
 		</div>
