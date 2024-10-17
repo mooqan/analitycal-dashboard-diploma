@@ -28,8 +28,10 @@ cd client
 npm run dev
 ```
 
+opens at:
+
 ```
-opens at http://localhost:5173/
+http://localhost:5173/
 ```
 
 ## Features
